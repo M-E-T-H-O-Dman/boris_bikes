@@ -1,16 +1,22 @@
 require 'bikes'
 
 describe Bike do
+
+	let (:trek) { Bike.new}
 	 
 	 it 'should not be broken after we create it' do
-	 	trek = Bike.new
 	 	expect(trek.broken?).to be false
 	 end
 
 	 it 'should be breakable' do
-	 	trek = Bike.new
 		trek.break!
 		expect(trek).to be_broken
+	 end
+
+	 it 'should be fixable' do
+	 	trek.break!
+	 	trek.fix!
+	 	expect(trek).not_to be_broken
 	 end
 
 end
