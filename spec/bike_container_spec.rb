@@ -5,6 +5,7 @@ class ContainerHolder; include BikeContainer; end
 describe BikeContainer do
 	
 	let (:astana) {Bike.new}
+	let (:marin) {Bike.new}
 	let (:holder) {ContainerHolder.new}
 
 	def fill_holder(holder)
@@ -22,6 +23,30 @@ describe BikeContainer do
 		holder.release(astana)
 		expect(holder.bike_count).to eq(0)
 	end
+
+	it "should not release a bike that is not present" do
+		holder.dock(astana)
+		holder.release(marin)
+		expect(holder.bike_count).to eq(1)
+	end
+
+	it "request to release non-existent bike should return an error message" do
+		holder.dock(astana)
+		expect(holder.release(marin)).to eq "That bike is not present"
+	end
+
+	it "should release a bike even if a particular bike is not specified" do
+		holder.dock(astana)
+		holder.release()
+		expect(holder.bike_count).to eq(0)
+	end
+
+	it 'should not release a broken bike to a person' do
+		astana.break!
+		holder.dock(astana)
+		holder.release(astana)
+		expect(holder.bike_count).to eq(1)
+	end	
 
 	it 'should know when full' do 
 		expect(holder).not_to be_full

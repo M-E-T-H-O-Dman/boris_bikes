@@ -23,8 +23,10 @@ module BikeContainer
 		bikes << bike
 	end
 
-	def release(bike)
-		bikes.delete(bike)
+	def release(bike = bikes.first)
+		unless bike.broken? == true
+			bikes.delete(bike) {"That bike is not present"}
+		end
 	end
 
 	def full?
