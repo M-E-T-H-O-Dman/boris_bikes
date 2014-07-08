@@ -1,3 +1,5 @@
+require './lib/bikes'
+
 module BikeContainer
 
 	DEFAULT_CAPACITY = 10
@@ -20,13 +22,13 @@ module BikeContainer
 
 	def dock(bike)
 		raise "We're full, son!" if full?
+		raise "Get that out of my dock!" unless bike.is_a?(Bike)
 		bikes << bike
 	end
 
 	def release(bike = bikes.first)
-		unless bike.broken? == true
-			bikes.delete(bike) {"That bike is not present"}
-		end
+		raise "That bike was broken by Charlie, please choose another" if bike.broken?
+		bikes.delete(bike) {"That bike is not present"}
 	end
 
 	def full?

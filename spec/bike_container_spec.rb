@@ -18,6 +18,22 @@ describe BikeContainer do
 		expect(holder.bike_count).to eq(1)
 	end
 
+	it 'should know when full' do 
+		expect(holder).not_to be_full
+		fill_holder(holder)
+		expect(holder).to be_full
+	end
+
+	it 'should not accept a bike if it is full' do
+		fill_holder(holder)
+		expect(lambda { holder.dock(astana) }).to raise_error(RuntimeError)
+	end
+
+	it 'Should not accept items other than bikes' do
+		expect{holder.dock("not a bike")}.to raise_error(RuntimeError)
+		expect(holder.bike_count).to eq(0)
+	end	
+
 	it "should release a bike" do
 		holder.dock(astana)
 		holder.release(astana)
@@ -44,20 +60,8 @@ describe BikeContainer do
 	it 'should not release a broken bike to a person' do
 		astana.break!
 		holder.dock(astana)
-		holder.release(astana)
-		expect(holder.bike_count).to eq(1)
+		expect{holder.release(astana)}.to raise_error(RuntimeError)
 	end	
-
-	it 'should know when full' do 
-		expect(holder).not_to be_full
-		fill_holder(holder)
-		expect(holder).to be_full
-	end
-
-	it 'should not accept a bike if it is full' do
-		fill_holder(holder)
-		expect(lambda { holder.dock(astana) }).to raise_error(RuntimeError)
-	end
 
 	it 'should provide the list of available bikes' do
 		working_bike, broken_bike = Bike.new, Bike.new
