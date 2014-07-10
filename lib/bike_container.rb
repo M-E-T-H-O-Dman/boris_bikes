@@ -27,7 +27,6 @@ module BikeContainer
 	end
 
 	def release(bike = bikes.first)
-		raise "That bike was broken by Charlie, please choose another" if bike.broken?
 		bikes.delete(bike) {"That bike is not present"}
 	end
 
@@ -44,12 +43,11 @@ module BikeContainer
 	end
 
 	def broken_bikes
-		bikes.select {|bike| bike.broken?}
+		@broken_bikes = bikes.select {|bike| bike.broken?}
 	end
 
 	def release_broken_bikes
-		bikes.delete {|bike| bike.broken?}
+		bikes.delete_if{|bike| bike.broken?}
 	end
-
 
 end

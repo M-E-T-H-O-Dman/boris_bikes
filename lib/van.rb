@@ -4,16 +4,11 @@ class Van
 
 	include BikeContainer
 
-	def initialize(bikes=nil)
-		@bikes ||= bikes
-	end
-
 	def collect_broken_bikes_from(station)
-		@bikes = station.release_broken_bikes
-	end
-
-	def has_bikes?
-		!@bikes.nil?
+		station.broken_bikes.each do |bike|
+			dock(bike) if bike.broken?
+			station.release_broken_bikes
+		end
 	end
 
 end

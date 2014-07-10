@@ -6,6 +6,7 @@ describe BikeContainer do
 	
 	let (:astana) {Bike.new}
 	let (:marin) {Bike.new}
+	let (:trek) {Bike.new}
 	let (:holder) {ContainerHolder.new}
 
 	def fill_holder(holder)
@@ -57,18 +58,26 @@ describe BikeContainer do
 		expect(holder.bike_count).to eq(0)
 	end
 
-	it 'should not release a broken bike to a person' do
-		astana.break!
-		holder.dock(astana)
-		expect{holder.release(astana)}.to raise_error(RuntimeError)
-	end	
-
 	it 'should provide the list of available bikes' do
-		working_bike, broken_bike = Bike.new, Bike.new
-		broken_bike.break!
-		holder.dock(working_bike)
-		holder.dock(broken_bike)
-		expect(holder.available_bikes).to eq([working_bike])
+		trek.break!
+		holder.dock(astana)
+		holder.dock(trek)
+		expect(holder.available_bikes).to eq([astana])
+	end
+
+	it 'should know which bikes are broken' do
+		trek.break!
+		holder.dock(marin)
+		holder.dock(trek)
+		expect(holder.broken_bikes).to eq [trek]
+	end
+
+	it 'should release broken bikes' do
+		trek.break!
+		holder.dock(marin)
+		holder.dock(trek)
+		holder.release_broken_bikes
+		expect(holder.bike_count).to eq(1)
 	end
 
 end
